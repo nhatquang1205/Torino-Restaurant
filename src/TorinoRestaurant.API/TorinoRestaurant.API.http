@@ -1,0 +1,6 @@
+@TorinoRestaurant.API_HostAddress = http://localhost:5107
+
+GET {{TorinoRestaurant.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

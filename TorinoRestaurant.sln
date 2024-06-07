@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4E429068-FCF7-4202-A2C2-2AB255AC732A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.API", "src\TorinoRestaurant.API\TorinoRestaurant.API.csproj", "{2A34575A-F571-481A-9234-24D74DE0961A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.Application", "src\TorinoRestaurant.Application\TorinoRestaurant.Application.csproj", "{3CA56058-2487-4097-B533-95C6DA5CF794}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.Core", "src\TorinoRestaurant.Core\TorinoRestaurant.Core.csproj", "{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.Infrastructure", "src\TorinoRestaurant.Infrastructure\TorinoRestaurant.Infrastructure.csproj", "{BFAAE6F5-7384-4048-8476-A8A527684CE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.Migrations", "src\TorinoRestaurant.Migrations\TorinoRestaurant.Migrations.csproj", "{54A9304A-83EC-4999-B8EA-8EDFAD6C8304}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorinoRestaurant.Hosting", "src\TorinoRestaurant.Hosting\TorinoRestaurant.Hosting.csproj", "{9109EA3F-8849-44D1-93CB-E4D0037DC538}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A34575A-F571-481A-9234-24D74DE0961A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A34575A-F571-481A-9234-24D74DE0961A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A34575A-F571-481A-9234-24D74DE0961A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A34575A-F571-481A-9234-24D74DE0961A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CA56058-2487-4097-B533-95C6DA5CF794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA56058-2487-4097-B533-95C6DA5CF794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA56058-2487-4097-B533-95C6DA5CF794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA56058-2487-4097-B533-95C6DA5CF794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFAAE6F5-7384-4048-8476-A8A527684CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFAAE6F5-7384-4048-8476-A8A527684CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFAAE6F5-7384-4048-8476-A8A527684CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFAAE6F5-7384-4048-8476-A8A527684CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54A9304A-83EC-4999-B8EA-8EDFAD6C8304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A9304A-83EC-4999-B8EA-8EDFAD6C8304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A9304A-83EC-4999-B8EA-8EDFAD6C8304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A9304A-83EC-4999-B8EA-8EDFAD6C8304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9109EA3F-8849-44D1-93CB-E4D0037DC538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9109EA3F-8849-44D1-93CB-E4D0037DC538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9109EA3F-8849-44D1-93CB-E4D0037DC538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9109EA3F-8849-44D1-93CB-E4D0037DC538}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2A34575A-F571-481A-9234-24D74DE0961A} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+		{3CA56058-2487-4097-B533-95C6DA5CF794} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+		{81BA8723-D0BE-404C-BB5F-CF7ABBB8A0C7} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+		{BFAAE6F5-7384-4048-8476-A8A527684CE1} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+		{54A9304A-83EC-4999-B8EA-8EDFAD6C8304} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+		{9109EA3F-8849-44D1-93CB-E4D0037DC538} = {4E429068-FCF7-4202-A2C2-2AB255AC732A}
+	EndGlobalSection
+EndGlobal
