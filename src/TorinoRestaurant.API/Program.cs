@@ -1,44 +1,96 @@
+using Autofac;
+using TorinoRestaurant.API.Infrastructure.Filters;
+using TorinoRestaurant.Application.AutofacModules;
+using TorinoRestaurant.Infrastructure.AutofacModules;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
+using TorinoRestaurant.Hosting;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.RegisterDefaults();
+
 // Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "TorinoRestaurant API",
+                        Version = "v1",
+                        Description = "HTTP API for accessing TorinoRestaurant data"
+                    });
+    options.DescribeAllParametersInCamelCase();
+});
+builder.Services.AddCors();
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("Application is running"))
+#if (UseSqlServer)
+    .AddSqlServer(builder.Configuration["Database:SqlConnectionString"]!);
+#else
+    .AddNpgSql(builder.Configuration["Database:PostgresConnectionString"]!);
+#endif
+
+//Add HSTS
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    container.RegisterModule(new ApplicationModule());
+    container.RegisterModule(new InfrastructureModule(builder.Configuration));
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI();
+
+if (app.Environment.IsProduction())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Required to forward headers from load balancers and reverse proxies
+    app.UseForwardedHeaders();
+    app.UseHttpsRedirection();
+
+    //Add security response headers
+    app.UseHsts();
+    app.Use((context, next) =>
+    {
+        context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+        context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+        return next.Invoke();
+    });
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+app.UseCors(options =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    options.AllowAnyMethod()
+           .AllowAnyHeader()
+           .AllowAnyOrigin()
+           .WithExposedHeaders("Content-Disposition");
+});
 
-app.MapGet("/weatherforecast", () =>
+app.UseAuthorization();
+
+app.MapHealthChecks("healthz");
+app.MapHealthChecks("liveness", new HealthCheckOptions
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    Predicate = r => r.Name.Contains("self")
+});
+
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

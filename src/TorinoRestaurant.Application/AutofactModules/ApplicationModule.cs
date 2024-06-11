@@ -3,7 +3,7 @@ using Autofac;
 using AutoMapper;
 using MediatR;
 
-namespace TorinoRestaurant.Application.AutofactModules
+namespace TorinoRestaurant.Application.AutofacModules
 {
     public sealed class ApplicationModule : Autofac.Module
     {

@@ -1,7 +1,7 @@
 using Autofac;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TorinoRestaurant.Application.AutofactModules;
+using TorinoRestaurant.Application.AutofacModules;
 using TorinoRestaurant.Hosting;
 using TorinoRestaurant.Infrastructure.AutofacModules;
 using TorinoRestaurant.Migrations.Factories;
