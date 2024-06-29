@@ -8,6 +8,9 @@ using Microsoft.OpenApi.Models;
 using TorinoRestaurant.Hosting;
 using TorinoRestaurant.Application.Commons.Extensions;
 using TorinoRestaurant.Application.Commons;
+using Minio;
+using TorinoRestaurant.Application.Abstractions.Services;
+using TorinoRestaurant.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -23,10 +26,7 @@ builder.Services
         options.Filters.Add(typeof(HttpGlobalExceptionFilter));
     });
 
-builder.Services.AddOptions<JwtSettings>()
-    .BindConfiguration($"{nameof(JwtSettings)}")
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+builder.Services.AddCustomOption(configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -54,6 +54,23 @@ builder.Services.AddHsts(options =>
     options.Preload = true;
     options.IncludeSubDomains = true;
     options.MaxAge = TimeSpan.FromDays(365);
+});
+
+builder.Services.AddSingleton(sp =>
+{
+    var endpoint = configuration.GetValue<string>("BlobStorage:Endpoint");
+    var accessKey = configuration.GetValue<string>("BlobStorage:AccessKey");
+    var secretKey = configuration.GetValue<string>("BlobStorage:SecretKey");
+
+    return new MinioClient().WithEndpoint(endpoint).WithCredentials(accessKey, secretKey).WithSSL().Build();
+});
+
+builder.Services.AddScoped<IFileStorageService, MinIOFileStorageService>(sp =>
+{
+    var bucketName = configuration.GetValue<string>("BlobStorage:BucketName") ?? "pixor";
+    var minioClient = sp.GetRequiredService<IMinioClient>();
+
+    return new MinIOFileStorageService(minioClient, bucketName, configuration);
 });
 
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
