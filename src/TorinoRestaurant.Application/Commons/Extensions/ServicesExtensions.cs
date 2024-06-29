@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using TorinoRestaurant.Application.Abstractions.Services;
 
 namespace TorinoRestaurant.Application.Commons.Extensions
 {
@@ -177,6 +178,34 @@ namespace TorinoRestaurant.Application.Commons.Extensions
                         options.CustomSchemaIds(x => x.FullName);
                     }
                 ).AddSwaggerGenNewtonsoftSupport();
+            }
+            catch { }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Cấu hình sử dụng các biến ở appSetting
+        /// <para>Created at: 29/06/2024</para>
+        /// <para>Created by: QuangTN</para>
+        /// </summary>
+        /// <param name="services">Các dịch vụ của API hiện tại</param>
+        /// <param name="configuration">Các cấu hình API hiện tại</param>
+        /// <returns>Dịch vụ sau khi đã cài đặt</returns>
+        public static IServiceCollection AddCustomOption(this IServiceCollection services, IConfiguration configuration)
+        {
+            try
+            {
+                services.AddOptions<JwtSettings>()
+                    .BindConfiguration($"{nameof(JwtSettings)}")
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+                
+                services.AddOptions<MinioSettings>()
+                    .BindConfiguration($"{nameof(MinioSettings)}")
+                    .ValidateDataAnnotations()
+                    .ValidateOnStart();
+                
             }
             catch { }
 
