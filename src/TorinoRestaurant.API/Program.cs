@@ -6,19 +6,33 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using TorinoRestaurant.Hosting;
+using TorinoRestaurant.Application.Commons.Extensions;
+using TorinoRestaurant.Application.Commons;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Host.RegisterDefaults();
 
-// Add services to the container.
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-});
+builder.Services
+    .AddCustomAuthentication(configuration)
+    .AddCustomApiVersioning(configuration)
+    .AddCustomCors(configuration)
+    .AddControllers(options =>
+    {
+        options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+    });
+
+builder.Services.AddOptions<JwtSettings>()
+    .BindConfiguration($"{nameof(JwtSettings)}")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCustomSwagger(configuration, typeof(Program).Name);
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
@@ -30,14 +44,9 @@ builder.Services.AddSwaggerGen(options =>
                     });
     options.DescribeAllParametersInCamelCase();
 });
-builder.Services.AddCors();
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy("Application is running"))
-#if (UseSqlServer)
     .AddSqlServer(builder.Configuration["Database:SqlConnectionString"]!);
-#else
-    .AddNpgSql(builder.Configuration["Database:PostgresConnectionString"]!);
-#endif
 
 //Add HSTS
 builder.Services.AddHsts(options =>
@@ -68,9 +77,9 @@ if (app.Environment.IsProduction())
     app.UseHsts();
     app.Use((context, next) =>
     {
-        context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-        context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+        context.Response.Headers.Append("X-Xss-Protection", "1; mode=block");
+        context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+        context.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
         return next.Invoke();
     });
 }

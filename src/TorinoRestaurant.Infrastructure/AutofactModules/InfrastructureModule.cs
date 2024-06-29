@@ -45,6 +45,10 @@ namespace TorinoRestaurant.Infrastructure.AutofacModules
             builder.RegisterType<DateTimeService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<TokenService>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
 
         private static DbContextOptions<DataContext> CreateDbOptions(IConfiguration configuration)

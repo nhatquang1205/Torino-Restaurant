@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TorinoRestaurant.API.Infrastructure.ActionResults;
 using TorinoRestaurant.Application.Common.Models;
@@ -14,6 +15,7 @@ namespace TorinoRestaurant.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [Authorize]
     public sealed class UserControllers : ControllerBase
     {
         private readonly IMediator _mediator;
