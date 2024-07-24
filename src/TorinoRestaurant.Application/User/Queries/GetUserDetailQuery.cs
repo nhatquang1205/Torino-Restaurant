@@ -7,17 +7,12 @@ using TblUser = TorinoRestaurant.Core.Users.Entities.User;
 
 namespace TorinoRestaurant.Application.User.Queries
 {
-    public sealed record GetUserDetailQuery(Guid Id) : Query<UserEntity>;
+    public sealed record GetUserDetailQuery(long Id) : Query<UserEntity>;
 
-    public sealed class GetUserDetailQueryHandler : QueryHandler<GetUserDetailQuery, UserEntity>
+    public sealed class GetUserDetailQueryHandler(IMapper mapper,
+        IRepository<TblUser, long> repository) : QueryHandler<GetUserDetailQuery, UserEntity>(mapper)
     {
-        private readonly IRepository<TblUser> _repository;
-
-        public GetUserDetailQueryHandler(IMapper mapper,
-            IRepository<TblUser> repository) : base(mapper)
-        {
-            _repository = repository;
-        }
+        private readonly IRepository<TblUser, long> _repository = repository;
 
         protected override async Task<UserEntity> HandleAsync(GetUserDetailQuery request)
         {

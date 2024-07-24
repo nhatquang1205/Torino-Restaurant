@@ -55,7 +55,7 @@ namespace TorinoRestaurant.Infrastructure
             {
                 var aggregateBuild = modelBuilder.Entity(type);
                 aggregateBuild.Ignore(nameof(AggregateRoot.DomainEvents));
-                aggregateBuild.Property(nameof(AggregateRoot.Id)).ValueGeneratedNever();
+                aggregateBuild.Property(nameof(AggregateRoot.Id)).ValueGeneratedOnAdd();
             }
         }
     }

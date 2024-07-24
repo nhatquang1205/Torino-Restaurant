@@ -25,7 +25,10 @@ namespace TorinoRestaurant.Migrations.Migrations
             modelBuilder.Entity("TorinoRestaurant.Core.Products.Entities.Category", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -59,7 +62,10 @@ namespace TorinoRestaurant.Migrations.Migrations
             modelBuilder.Entity("TorinoRestaurant.Core.Products.Entities.Product", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
@@ -141,7 +147,10 @@ namespace TorinoRestaurant.Migrations.Migrations
             modelBuilder.Entity("TorinoRestaurant.Core.Users.Entities.RoleOfUser", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -174,7 +183,10 @@ namespace TorinoRestaurant.Migrations.Migrations
             modelBuilder.Entity("TorinoRestaurant.Core.Users.Entities.User", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
