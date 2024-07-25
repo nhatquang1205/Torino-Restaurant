@@ -6,6 +6,8 @@ using TorinoRestaurant.Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using TorinoRestaurant.Core.Users.Entities;
+using TorinoRestaurant.Core.Products.Entities;
 
 namespace TorinoRestaurant.Infrastructure.AutofacModules
 {
@@ -39,8 +41,11 @@ namespace TorinoRestaurant.Infrastructure.AutofacModules
                 .InstancePerRequest()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterGeneric(typeof(Repository<>))
-                .As(typeof(IRepository<>));
+            builder.RegisterType(typeof(Repository<User, long>))
+                .As(typeof(IRepository<User, long>));
+
+            builder.RegisterType(typeof(Repository<Category, long>))
+                .As(typeof(IRepository<Category, long>));
 
             builder.RegisterType<DateTimeService>()
                 .AsImplementedInterfaces()

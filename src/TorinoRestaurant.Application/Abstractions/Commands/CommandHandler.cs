@@ -1,46 +1,22 @@
 using MediatR;
 using TorinoRestaurant.Application.Abstractions.Repositories;
+using TorinoRestaurant.Application.Abstractions.Services;
 
 namespace TorinoRestaurant.Application.Abstractions.Commands
 {
-    public abstract class CommandHandler
+    public abstract class CommandHandler(IUnitOfWork unitOfWork, IFileStorageService fileStorageService)
     {
-        protected readonly IUnitOfWork UnitOfWork;
-
-        protected CommandHandler(IUnitOfWork unitOfWork)
-        {
-            UnitOfWork = unitOfWork;
-        }
+        protected readonly IUnitOfWork UnitOfWork = unitOfWork;
+        protected readonly IFileStorageService FileStorageService = fileStorageService;
     }
 
-    public abstract class CommandHandler<TCommand> : CommandHandler, IRequestHandler<TCommand, Unit> where TCommand : Command
+    public abstract class CommandHandler<TCommand, P>(IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : CommandHandler(unitOfWork, fileStorageService), IRequestHandler<TCommand, P> where TCommand: CreateCommand<P>
     {
-        protected CommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {
+        protected abstract Task<P> HandleAsync(TCommand request);
 
-        }
-
-        public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
-        {
-            await HandleAsync(request);
-            return Unit.Value;
-        }
-
-        protected abstract Task HandleAsync(TCommand request);
-    }
-
-    public abstract class CreateCommandHandler<TCommand> : CommandHandler, IRequestHandler<TCommand, Guid> where TCommand : CreateCommand
-    {
-        protected CreateCommandHandler(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {
-
-        }
-
-        public async Task<Guid> Handle(TCommand request, CancellationToken cancellationToken)
+        public async Task<P> Handle(TCommand request, CancellationToken cancellationToken)
         {
             return await HandleAsync(request);
         }
-
-        protected abstract Task<Guid> HandleAsync(TCommand request);
     }
 }

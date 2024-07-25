@@ -11,12 +11,12 @@ using TblUser = TorinoRestaurant.Core.Users.Entities.User;
 
 namespace TorinoRestaurant.Application.Authentication.Command
 {
-    public sealed record LoginCommand(string Username, string Password) :IRequest<AuthenticatedResult> { }
+    public sealed record LoginCommand(string Username, string Password) : IRequest<AuthenticatedResult> { }
 
-    public sealed class LoginCommandHandler(IRepository<TblUser> usersRepository,
+    public sealed class LoginCommandHandler(IRepository<TblUser, long> usersRepository,
         ITokenService tokenService) : IRequestHandler<LoginCommand, AuthenticatedResult>
     {
-        private readonly IRepository<TblUser> _usersRepository = usersRepository;
+        private readonly IRepository<TblUser, long> _usersRepository = usersRepository;
         private readonly ITokenService _tokenService = tokenService;
 
         public async Task<AuthenticatedResult> Handle(LoginCommand request, CancellationToken cancellationToken)

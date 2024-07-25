@@ -5,7 +5,7 @@ namespace TorinoRestaurant.API.Infrastructure.ActionResults
 {
     public class Envelope
     {
-       public int Status { get; set; }
+        public int Status { get; set; }
         public string? ErrorMessage { get; set; }
         public DateTime Timestamp { get; set; }
         public string? TraceId { get; set; }
@@ -34,13 +34,8 @@ namespace TorinoRestaurant.API.Infrastructure.ActionResults
         }
     }
 
-    public class CreatedResultEnvelope
-    {
-        public Guid Id { get; set; }
-
-        public CreatedResultEnvelope(Guid id)
-        {
-            Id = id;
-        }
+    public class CreatedResultEnvelope(string id)
+    {   
+        public string Id { get; set; } = id;
     }
 }

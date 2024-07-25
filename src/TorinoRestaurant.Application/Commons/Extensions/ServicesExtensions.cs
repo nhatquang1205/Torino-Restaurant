@@ -156,6 +156,13 @@ namespace TorinoRestaurant.Application.Commons.Extensions
                             Title = $"{serviceName} HTTP API",
                             Version = version,
                             Description = $"The {serviceName} Service HTTP API",
+                            TermsOfService = null, 
+                            Contact = new OpenApiContact 
+                            {
+                            },
+                            License = new OpenApiLicense 
+                            {
+                            }
                         });
 
                         //  Nếu có 2 API trùng nhau thì lấy API đầu tiên để đưa vào API doc
@@ -174,6 +181,9 @@ namespace TorinoRestaurant.Application.Commons.Extensions
                         });
 
                         // options.OperationFilter<AuthorizeCheckOperationFilter>();
+                        var xmlFile = $"TorinoRestaurant.Application.xml";
+                        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                        options.IncludeXmlComments(xmlPath);
                         options.OperationFilter<SwaggerParameterFilter>();
                         options.CustomSchemaIds(x => x.FullName);
                     }

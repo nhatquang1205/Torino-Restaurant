@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace TorinoRestaurant.Core.Abstractions.Entities
 {
     public abstract class AggregateRoot : AggregateRoot<long> {}
