@@ -29,5 +29,7 @@ namespace TorinoRestaurant.Application.Categories.Models
 
         [JsonProperty("image")]
         public IFormFile? Image { get; init; }
+
+        public bool IsDeleteImage { get; init; }
     }
 }

@@ -20,7 +20,7 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Hoài bé</ThemedText>
+        <ThemedText type="title">Hoài bé bỏng</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
