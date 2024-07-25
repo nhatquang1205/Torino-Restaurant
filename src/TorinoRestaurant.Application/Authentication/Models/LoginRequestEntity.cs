@@ -8,16 +8,16 @@ namespace TorinoRestaurant.Application.Authentication.Models
         /// <summary>
         /// Tên đăng nhập, email hoặc số điện thoại
         /// </summary>
-        /// <example>admin</example>
+        /// <example>0932046296</example>
         [Required(ErrorMessage = "E001")]
         [StringLength(50, ErrorMessage = "E005")]
         [JsonProperty("username")]
         public required string Username { get; init; }
 
         /// <summary>
-        /// Mật khẩu đăng nhập đã mã hoá MD5
+        /// Mật khẩu đăng nhập
         /// </summary>
-        /// <example>628c709b5d084dc6b22a6dbe87665419</example>
+        /// <example>Admin@123</example>
         [Required(ErrorMessage = "E001")]
         [StringLength(50, ErrorMessage = "E005")]
         [JsonProperty("password")]

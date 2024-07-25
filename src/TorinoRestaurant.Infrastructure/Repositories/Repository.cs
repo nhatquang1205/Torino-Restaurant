@@ -4,7 +4,7 @@ using TorinoRestaurant.Core.Abstractions.Entities;
 
 namespace TorinoRestaurant.Infrastructure.Repositories
 {
-    internal class Repository<T> : IRepository<T> where T : AggregateRoot
+    internal class Repository<T, P> : IRepository<T, P> where T : AggregateRoot<P>
     {
         private readonly DataContext _context;
         private readonly DbSet<T> _entitySet;
@@ -25,7 +25,7 @@ namespace TorinoRestaurant.Infrastructure.Repositories
             return set;
         }
 
-        public async Task<T?> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(P id)
         {
             return await _entitySet.FindAsync(id);
         }

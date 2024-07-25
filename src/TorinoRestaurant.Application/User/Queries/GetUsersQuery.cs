@@ -10,9 +10,9 @@ namespace TorinoRestaurant.Application.User.Queries
 {
     public sealed record GetUsersQuery() : ParamsSearch, IRequest<PaginatedList<UserEntity>>;
     public sealed class GetUsersQueryHandler(
-        IRepository<TblUser> repository) : IRequestHandler<GetUsersQuery, PaginatedList<UserEntity>>
+        IRepository<TblUser, long> repository) : IRequestHandler<GetUsersQuery, PaginatedList<UserEntity>>
     {
-        private readonly IRepository<TblUser> _repository = repository;
+        private readonly IRepository<TblUser, long> _repository = repository;
 
         public async Task<PaginatedList<UserEntity>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
@@ -27,12 +27,13 @@ namespace TorinoRestaurant.Application.User.Queries
                 .Take(request.PageSize)
                 .Select(x => new UserEntity
                 {
+                    Id = x.Id,
                     FullName = x.FullName,
                     PhoneNumber = x.PhoneNumber,
                 })
                 .ToListAsync(cancellationToken);
 
-            return new PaginatedList<UserEntity>(users, await query.CountAsync(), request.CurrentPage, request.PageSize);
+            return new PaginatedList<UserEntity>(users, await query.CountAsync(cancellationToken: cancellationToken), request.CurrentPage, request.PageSize);
         }
     }
 }

@@ -1,52 +1,47 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TorinoRestaurant.API.Infrastructure.ActionResults;
+using TorinoRestaurant.Application.Categories.Command;
+using TorinoRestaurant.Application.Categories.Models;
+using TorinoRestaurant.Application.Categories.Queries;
 using TorinoRestaurant.Application.Common.Models;
-using TorinoRestaurant.Application.User.Models;
-using TorinoRestaurant.Application.User.Queries;
 
 namespace TorinoRestaurant.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    [Authorize]
-    public sealed class UserControllers : ControllerBase
+    // [Authorize]
+    public sealed class CategoriesController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public UserControllers(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(UserEntity), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CategoryEntity), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> GetDetail(long id)
         {
-            var user = await _mediator.Send(new GetUserDetailQuery(id));
-            return Ok(user);
+            var category = await _mediator.Send(new GetCategoryDetailQuery(id));
+            return Ok(category);
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(PaginatedList<UserEntity>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromQuery] GetUsersQuery request)
+        [ProducesResponseType(typeof(PaginatedList<CategoryEntity>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get([FromQuery] GetCategoriesQuery request)
         {
             var users = await _mediator.Send(request);
             return Ok(users);
         }
 
-        // [HttpPost]
-        // [ProducesResponseType(typeof(CreatedResultEnvelope), StatusCodes.Status201Created)]
-        // [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
-        // public async Task<IActionResult> Post([FromBody] WeatheruserCreateDto user)
-        // {
-        //     var id = await _mediator.Send(new CreateWeatheruserCommand(user.TemperatureC, user.Date, user.Summary, user.LocationId));
-        //     return CreatedAtAction(nameof(Get), new { id }, new CreatedResultEnvelope(id));
-        // }
+        [HttpPost]
+        [ProducesResponseType(typeof(CreatedResultEnvelope), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Post([FromForm] CategoryCreateUpdateEntity category)
+        {
+            var id = await _mediator.Send(new CreateCategoryCommand(category.Name, category.Description, category.Image));
+            return CreatedAtAction(nameof(Get), new { id }, new CreatedResultEnvelope(id.ToString()));
+        }
 
         // [HttpPut("{id}")]
         // [ProducesResponseType(StatusCodes.Status204NoContent)]

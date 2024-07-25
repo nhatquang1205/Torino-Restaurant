@@ -58,16 +58,16 @@ builder.Services.AddHsts(options =>
 
 builder.Services.AddSingleton(sp =>
 {
-    var endpoint = configuration.GetValue<string>("BlobStorage:Endpoint");
-    var accessKey = configuration.GetValue<string>("BlobStorage:AccessKey");
-    var secretKey = configuration.GetValue<string>("BlobStorage:SecretKey");
+    var endpoint = configuration.GetValue<string>("MinioSettings:Endpoint");
+    var accessKey = configuration.GetValue<string>("MinioSettings:AccessKey");
+    var secretKey = configuration.GetValue<string>("MinioSettings:SecretKey");
 
-    return new MinioClient().WithEndpoint(endpoint).WithCredentials(accessKey, secretKey).WithSSL().Build();
+    return new MinioClient().WithEndpoint(endpoint).WithCredentials(accessKey, secretKey).WithSSL(false).Build();
 });
 
 builder.Services.AddScoped<IFileStorageService, MinIOFileStorageService>(sp =>
 {
-    var bucketName = configuration.GetValue<string>("BlobStorage:BucketName") ?? "pixor";
+    var bucketName = configuration.GetValue<string>("MinioSettings:BucketName") ?? "pixor";
     var minioClient = sp.GetRequiredService<IMinioClient>();
 
     return new MinIOFileStorageService(minioClient, bucketName, configuration);

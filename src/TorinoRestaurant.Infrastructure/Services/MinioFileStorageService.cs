@@ -21,7 +21,7 @@ namespace TorinoRestaurant.Infrastructure.Services
             _minioClient = minioClient;
             _bucketName = bucketName;
             _configuration = configuration;
-            baseUrl = $"{_configuration.GetValue<string>("BlobStorage:Protocol")}{_configuration.GetValue<string>("BlobStorage:endpoint")}/{_bucketName}/";
+            baseUrl = $"{_configuration.GetValue<string>("MinioSettings:Protocol")}{_configuration.GetValue<string>("MinioSettings:endpoint")}/{_bucketName}/";
         }
 
         public async Task UploadFileAsync(string fileName, Stream stream, string contentType = "")
