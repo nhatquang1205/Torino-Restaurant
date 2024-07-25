@@ -29,8 +29,8 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(typeof(PaginatedList<CategoryEntity>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get([FromQuery] GetCategoriesQuery request)
         {
-            var users = await _mediator.Send(request);
-            return Ok(users);
+            var categories = await _mediator.Send(request);
+            return Ok(categories);
         }
 
         [HttpPost]
@@ -43,23 +43,32 @@ namespace TorinoRestaurant.API.Controllers
             return CreatedAtAction(nameof(Get), new { id }, new CreatedResultEnvelope(id.ToString()));
         }
 
-        // [HttpPut("{id}")]
-        // [ProducesResponseType(StatusCodes.Status204NoContent)]
-        // [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
-        // public async Task<IActionResult> Put(Guid id, [FromBody] WeatheruserUpdateDto user)
-        // {
-        //     await _mediator.Send(new UpdateWeatheruserCommand(id, user.Date));
-        //     return NoContent();
-        // }
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Put(long id, [FromBody] CategoryCreateUpdateEntity category)
+        {
+            await _mediator.Send(new UpdateCategoryCommand(id, category.Name, category.Description, category.Image, category.IsDeleteImage));
+            return NoContent();
+        }
 
-        // [HttpDelete("{id}")]
-        // [ProducesResponseType(StatusCodes.Status204NoContent)]
-        // [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
-        // public async Task<IActionResult> Delete(Guid id)
-        // {
-        //     await _mediator.Send(new DeleteWeatheruserCommand(id));
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(long id)
+        {
+            await _mediator.Send(new DeleteCategoryCommand([id]));
+            return NoContent();
+        }
+
+        [HttpDelete("bulk/{ids}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(List<long> ids)
+        {
+            await _mediator.Send(new DeleteCategoryCommand(ids));
+            return NoContent();
+        }
     }
 }
