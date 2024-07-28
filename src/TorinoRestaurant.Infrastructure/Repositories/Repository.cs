@@ -6,8 +6,8 @@ namespace TorinoRestaurant.Infrastructure.Repositories
 {
     internal class Repository<T, P> : IRepository<T, P> where T : AggregateRoot<P>
     {
-        private readonly DataContext _context;
-        private readonly DbSet<T> _entitySet;
+        protected readonly DataContext _context;
+        protected readonly DbSet<T> _entitySet;
 
         public Repository(DataContext context)
         {

@@ -22,14 +22,14 @@ namespace TorinoRestaurant.Application.Categories.Models
         /// Mô tả danh mục
         /// </summary>
         /// <example>Món khai vị</example>
-        [Required(ErrorMessage = "E001")]
-        [StringLength(50, ErrorMessage = "E005")]
+        [StringLength(100, ErrorMessage = "E005")]
         [JsonProperty("description")]
         public required string Description { get; init; }
 
         [JsonProperty("image")]
         public IFormFile? Image { get; init; }
 
+        [JsonProperty("isDeleteImage")]
         public bool IsDeleteImage { get; init; }
     }
 }

@@ -5,7 +5,7 @@ using TorinoRestaurant.Application.Abstractions.Services;
 using TblCategory = TorinoRestaurant.Core.Products.Entities.Category;
 namespace TorinoRestaurant.Application.Categories.Command
 {
-    public sealed record CreateCategoryCommand(string Name, string Description, IFormFile Image) : CreateCommand<long> { }
+    public sealed record CreateCategoryCommand(string Name, string Description, IFormFile? Image) : CreateCommand<long> { }
 
     public sealed class CreateCategoryCommandHandler(IRepository<TblCategory, long> categoriesRepository, IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : CommandHandler<CreateCategoryCommand, long>(unitOfWork, fileStorageService)
     {
@@ -20,7 +20,7 @@ namespace TorinoRestaurant.Application.Categories.Command
                 await request.Image.CopyToAsync(stream);
                 stream.Position = 0;
                 stream.Seek(0, SeekOrigin.Begin);
-                imageUrl = await FileStorageService.UploadFileGetUrlAsync(request.Image.FileName.Replace(" ", "-"), stream);
+                imageUrl = await FileStorageService.UploadFileGetUrlAsync($"{TblCategory.FolderImagePrefix}/{request.Image.FileName.Replace(" ", "-")}", stream);
             }
             var category = TblCategory.Create(request.Name, request.Description, imageUrl);
             await _categoriesRepository.Insert(category);
