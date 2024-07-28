@@ -47,6 +47,12 @@ namespace TorinoRestaurant.Infrastructure.AutofacModules
             builder.RegisterType(typeof(Repository<Category, long>))
                 .As(typeof(IRepository<Category, long>));
 
+            builder.RegisterType(typeof(Repository<Product, long>))
+                .As(typeof(IRepository<Product, long>));
+
+            builder.RegisterType(typeof(ProductRepository))
+                .AsImplementedInterfaces();
+
             builder.RegisterType<DateTimeService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

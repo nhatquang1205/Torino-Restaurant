@@ -32,6 +32,8 @@ namespace TorinoRestaurant.Core.Products.Entities
             AddDomainEvent(new CategoryCreatedDomainEvent(Id, Name, Description, ImageUrl));
         }
 
+        public static readonly string FolderImagePrefix = "categories";
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }

@@ -11,20 +11,18 @@ namespace TorinoRestaurant.Core.Products.Entities
             string vietnameseDescription,
             double price,
             double costPrice,
-            string imageUrl)
+            bool isUseForPrinter)
         {
             Name = name;
             Description = description;
             VietnameseDescription = vietnameseDescription;
             Price = price;
             CostPrice = costPrice;
+            IsUseForPrinter = isUseForPrinter;
             SaleCount = 0;
-            ImageUrl = imageUrl;
         }
 
-        #pragma warning disable CS8618 // this is needed for the ORM for serializing Value Objects
         private Product()
-        #pragma warning restore CS8618
         {
         }
 
@@ -34,18 +32,35 @@ namespace TorinoRestaurant.Core.Products.Entities
             string vietnameseDescription,
             double price,
             double costPrice,
-            string imageUrl)
+            bool isUseForPrinter)
         {
             // validation should go here before the aggregate is created
             // an aggregate should never be in an invalid state
-            var product = new Product(name, description, vietnameseDescription, price, costPrice, imageUrl);
+            var product = new Product(name, description, vietnameseDescription, price, costPrice, isUseForPrinter);
             product.PublishCreated();
             return product;
         }
 
+        public static readonly string FolderImagePrefix = "products";
+
         private void PublishCreated()
         {
-            AddDomainEvent(new ProductCreatedDomainEvent(Id, Name, Description, VietnameseDescription, Price, CostPrice, ImageUrl));
+            AddDomainEvent(new ProductCreatedDomainEvent(Id, Name, Description, VietnameseDescription, Price, CostPrice, ImageUrl, CategoryId, IsUseForPrinter, Slug));
+        }
+
+        public void SetSlug(string slug)
+        {
+            Slug = slug;
+        }
+
+        public void SetCategoryId(long categoryId)
+        {
+            CategoryId = categoryId;
+        }
+
+        public void SetImageUrl(string imageUrl)
+        {
+            ImageUrl = imageUrl;
         }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -55,6 +70,8 @@ namespace TorinoRestaurant.Core.Products.Entities
         public string ImageUrl { get; set; }
         public int SaleCount { get; set; }
         public long CategoryId { get; set; }
+        public string Slug { get; set; }
+        public bool IsUseForPrinter { get; set; } = true;
         public Category Category { get; set; } = default!;
     }
 }

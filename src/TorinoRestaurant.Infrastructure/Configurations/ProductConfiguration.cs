@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TorinoRestaurant.Core.Products.Entities;
@@ -13,7 +9,7 @@ namespace TorinoRestaurant.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.Property(e => e.Name)
-                .HasColumnType("nvarchar(128)")
+                .HasColumnType("nvarchar(256)")
                 .IsRequired();
             
             builder.Property(e => e.Description)
