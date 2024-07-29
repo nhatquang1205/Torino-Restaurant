@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TorinoRestaurant.API.Infrastructure.ActionResults;
 using TorinoRestaurant.Application.Authentication.Command;
@@ -14,7 +9,7 @@ namespace TorinoRestaurant.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public sealed class LoginController(IMediator mediator) : ControllerBase
+    public sealed class AuthController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
