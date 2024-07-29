@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 // Define a type for the slice state
 export interface AppState {
@@ -19,7 +19,7 @@ const initialState: AppState = {
 };
 
 export const appSlice = createSlice({
-  name: "app",
+  name: 'app',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -32,8 +32,8 @@ export const appSlice = createSlice({
     decreaseCountLoading: (state) => {
       state.countLoading -= 1;
     },
-    setIsAuthenticate: (state) => {
-      state.isAuthenticated = !state.isAuthenticated;
+    setIsAuthenticate: (state, action) => {
+      state.isAuthenticated = action.payload;
     },
   },
 });
