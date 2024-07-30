@@ -6,7 +6,7 @@ services:
     container_name: TorinoRestaurant_api
     build:
       context: .
-      dockerfile: src/TorinoRestaurant.Api/Dockerfile
+      dockerfile: src/TorinoRestaurant.API/Dockerfile
     environment:
       - TZ=Asia/Ho_Chi_Minh
       - ASPNETCORE_HTTP_PORTS=5000
