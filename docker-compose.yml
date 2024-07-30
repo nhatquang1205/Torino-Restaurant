@@ -1,0 +1,19 @@
+version: "3.4"
+
+services:
+  torino.restaurant.api:
+    image: torino.restaurant.api
+    container_name: TorinoRestaurant_api
+    build:
+      context: .
+      dockerfile: src/TorinoRestaurant.Api/Dockerfile
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - ASPNETCORE_HTTP_PORTS=5000
+    volumes:
+      - .:/app
+    ports:
+      - "6915:5000"
+    logging:
+      options:
+        max-size: 10m
