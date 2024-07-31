@@ -5,5 +5,6 @@ namespace TorinoRestaurant.Application.Abstractions.Repositories
     public interface IProductRepository : IRepository<Product, long>
     {
         Task<bool> IsExistSlug(long? productId, string slug);
+        Task<Product?> GetProductById(long productId);
     }
 }
