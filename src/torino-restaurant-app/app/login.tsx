@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Button } from 'react-native';
+import { Image, StyleSheet, Button, TextInput } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
@@ -10,6 +10,9 @@ import { ILoginResponse } from '@/models/auth/login_response';
 import * as SecureStore from 'expo-secure-store';
 import { setIsAuthenticate } from '@/store/app/app-slice';
 import { API_URLS } from '@/constants/ApiUrls';
+import React from 'react';
+import { ILoginInput } from '@/models/auth/login_input';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -25,12 +28,6 @@ export default function LoginScreen() {
     }
   }, [isAuthenticated]);
 
-  const handleOnClickCreate = () => {
-    post({
-      username: '0932046296',
-      password: 'Admin@123',
-    });
-  };
   useEffect(() => {
     async function setToken(response: ILoginResponse) {
       await SecureStore.setItemAsync('token', response.token);
@@ -40,13 +37,37 @@ export default function LoginScreen() {
         response.refreshTokenExpiryTime
       );
     }
+  
     if (response) {
       setToken(response).then(() => {
         dispatch(setIsAuthenticate(true));
       });
     }
+
+    if (error) {
+      console.log(error)
+    }
+
   }, [dispatch, response, error]);
 
+  
+
+  const [username, setUsername] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
+
+  const handleOnChangeUserName = function(value: string) {
+    setUsername(value);
+  }
+  const handleOnChangePassword = function (value: string) {
+    setPassword(value);
+  }
+  const handleOnPress = function () {
+    const loginInput: ILoginInput = {
+      username: username,
+      password: password,
+    }
+    post(loginInput);
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -58,8 +79,17 @@ export default function LoginScreen() {
       }
     >
       <ThemedView>
-        <Button title="Đăng nhập" onPress={handleOnClickCreate} />
+        <TextInput placeholder="Tên đăng nhập" value={username} maxLength={32} onChangeText={handleOnChangeUserName}/>
+        <ThemedView>
+        <TextInput placeholder="mật khẩu" value={password} maxLength={32} secureTextEntry onChangeText={handleOnChangePassword}/>
       </ThemedView>
+        <Button
+          title="Đăng nhập"
+          onPress={handleOnPress}
+        />
+      </ThemedView>
+      <ThemedText>{error}</ThemedText>        
+
     </ParallaxScrollView>
   );
 }
