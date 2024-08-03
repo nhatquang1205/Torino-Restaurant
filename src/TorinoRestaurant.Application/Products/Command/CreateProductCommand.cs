@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using TorinoRestaurant.Application.Abstractions.Commands;
 using TorinoRestaurant.Application.Abstractions.Repositories;
@@ -11,7 +7,6 @@ using TblCategory = TorinoRestaurant.Core.Products.Entities.Category;
 using TorinoRestaurant.Core.Abstractions.Guards;
 using TorinoRestaurant.Application.Commons;
 using TorinoRestaurant.Core.Abstractions.Exceptions;
-using TorinoRestaurant.Core.Products.Entities;
 
 
 namespace TorinoRestaurant.Application.Products.Command
@@ -24,7 +19,6 @@ namespace TorinoRestaurant.Application.Products.Command
         double Price,
         double CostPrice,
         bool IsUseForPrinter,
-        bool IsDeleteImage,
         IFormFile? Image) : CreateCommand<long> { }
 
     public class CreateProductCommandHandler(

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TorinoRestaurant.API.Infrastructure.ActionResults;
 using TorinoRestaurant.Application.Categories.Command;
@@ -11,7 +12,7 @@ namespace TorinoRestaurant.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    // [Authorize]
+    [Authorize]
     public sealed class CategoriesController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

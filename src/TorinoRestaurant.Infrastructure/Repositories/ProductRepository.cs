@@ -14,5 +14,10 @@ namespace TorinoRestaurant.Infrastructure.Repositories
             }
             return await _context.Products.AnyAsync(x => x.Slug == slug);
         }
+
+        public async Task<Product?> GetProductById(long productId)
+        {
+            return await _context.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == productId);
+        }
     }
 }
