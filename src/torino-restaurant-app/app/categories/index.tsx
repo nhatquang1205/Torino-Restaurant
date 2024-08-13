@@ -10,6 +10,7 @@ import { useGetApi } from '@/hooks/useGetApi';
 import { API_URLS } from '@/constants/ApiUrls';
 import React from 'react';
 import { MenuItem } from '@/components/MenuItem';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function HomeScreen() {
   useGetApi({
@@ -38,11 +39,7 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
     >
       <ThemedView style={styles.menuContainer}>
-        <MenuItem
-          label="Thực đơn"
-          iconName="restaurant-menu"
-          href="/categories"
-        />
+        <ThemedText>12345</ThemedText>
       </ThemedView>
       <ThemedView>
         <Button title="Đăng xuất" onPress={handleClickLogOutBtn} />

@@ -23,7 +23,7 @@ namespace TorinoRestaurant.Application.Authentication.Command
         {
             var usersQuery = _usersRepository.GetAll();
             var user = await usersQuery.FirstOrDefaultAsync(x => x.PhoneNumber == request.Username, cancellationToken: cancellationToken);
-            user = Guard.Against.NotFound(user, $"Phone number {request.Username} is not correct");
+            user = Guard.Against.NotFound(user, "Invalid phone number or password");
 
             if (Security.GetMD5(request.Password) != user.Password)
             {
