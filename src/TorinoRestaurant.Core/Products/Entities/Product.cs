@@ -1,4 +1,5 @@
 using TorinoRestaurant.Core.Abstractions.Entities;
+using TorinoRestaurant.Core.Orders.Entities;
 using TorinoRestaurant.Core.Products.DomainEvents;
 
 namespace TorinoRestaurant.Core.Products.Entities
@@ -20,6 +21,7 @@ namespace TorinoRestaurant.Core.Products.Entities
             CostPrice = costPrice;
             IsUseForPrinter = isUseForPrinter;
             SaleCount = 0;
+            OrderDetails = [];
         }
 
         private Product()
@@ -73,5 +75,6 @@ namespace TorinoRestaurant.Core.Products.Entities
         public string Slug { get; set; }
         public bool IsUseForPrinter { get; set; } = true;
         public Category Category { get; set; } = default!;
+        public ICollection<OrderDetail> OrderDetails{ get; set; }
     }
 }

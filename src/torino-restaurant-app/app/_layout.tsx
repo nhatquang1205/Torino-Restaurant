@@ -11,6 +11,9 @@ import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { store } from '@/store/store';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import { Stack } from 'expo-router/stack';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -19,6 +22,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    LoveYaLikeASister: require('../assets/fonts/LoveYaLikeASister-Regular.ttf'),
   });
 
   useEffect(() => {
@@ -32,10 +36,21 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Slot />
-      </ThemeProvider>
-    </Provider>
+    <SafeAreaView style={styles.container}>
+      <Provider store={store}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Slot />
+        </ThemeProvider>
+      </Provider>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+});
