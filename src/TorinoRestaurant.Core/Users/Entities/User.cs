@@ -1,4 +1,5 @@
 using TorinoRestaurant.Core.Abstractions.Entities;
+using TorinoRestaurant.Core.Orders.Entities;
 using TorinoRestaurant.Core.Users.DomainEvents;
 
 namespace TorinoRestaurant.Core.Users.Entities
@@ -13,9 +14,7 @@ namespace TorinoRestaurant.Core.Users.Entities
             Password = password;
         }
 
-        #pragma warning disable CS8618 // this is needed for the ORM for serializing Value Objects
         private User()
-        #pragma warning restore CS8618
         {
         }
 
@@ -57,5 +56,9 @@ namespace TorinoRestaurant.Core.Users.Entities
         public DateTime? RefreshTokenExpiryTime { get; private set; }
 
         public List<RoleOfUser> Roles { get; set; } = [];
+
+        public List<DineInTableHistory> StaffTableHistories { get; set; } = [];
+
+        public List<DineInTableHistory> CustomerTableHistories { get; set; } = [];
     }
 }

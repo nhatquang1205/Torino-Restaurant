@@ -1,50 +1,66 @@
-import { StyleSheet, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { useDispatch } from 'react-redux';
-import { setIsAuthenticate } from '@/store/app/app-slice';
-import { router } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import { useGetApi } from '@/hooks/useGetApi';
 import { API_URLS } from '@/constants/ApiUrls';
 import React from 'react';
-import { MenuItem } from '@/components/MenuItem';
-import { ThemedText } from '@/components/ThemedText';
+import { IListResultTemplate } from '@/models/result';
+import { ICategoryModel } from '@/models/categories/category_detail';
+import { CategoryItem } from '@/components/categories/CategoryItem';
+import RoundedButton from '@/components/commons/RoundedButton';
+import { Link } from 'expo-router';
 
-export default function HomeScreen() {
-  useGetApi({
+export default function ListCategoriesScreen() {
+  const { data, isLoading } = useGetApi<IListResultTemplate<ICategoryModel>>({
     url: API_URLS.CATEGORIES.GET_LIST,
     params: {},
     options: {},
     start: true,
   });
 
-  const dispatch = useDispatch();
+  const [isInEditMode, setIsInEditMode] = React.useState<boolean>(false);
 
-  const handleClickLogOutBtn = function () {
-    async function removeToken() {
-      await SecureStore.deleteItemAsync('token');
-      await SecureStore.deleteItemAsync('refresh_token');
-      await SecureStore.deleteItemAsync('refresh_token_expiry_time');
-    }
-    removeToken().then(() => {
-      dispatch(setIsAuthenticate(false));
-      router.replace('/login');
-    });
-  };
+  if (!(data?.items && data.items.length > 0) || isLoading) {
+    return null;
+  }
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-    >
+    <ThemedView style={{ flex: 1 }}>
       <ThemedView style={styles.menuContainer}>
-        <ThemedText>12345</ThemedText>
+        {data.items.map((category: ICategoryModel) => {
+          return (
+            <CategoryItem
+              key={`category-${category.id}`}
+              category={category}
+              isInEditMode={isInEditMode}
+            />
+          );
+        })}
+        {isInEditMode && (
+          <Link asChild href="/categories/create">
+            <RoundedButton title="Add new category" onPress={() => {}} />
+          </Link>
+        )}
       </ThemedView>
-      <ThemedView>
-        <Button title="Đăng xuất" onPress={handleClickLogOutBtn} />
+      <ThemedView style={styles.editButtonContainer}>
+        {!isInEditMode ? (
+          <RoundedButton
+            title="EDIT"
+            onPress={() => {
+              setIsInEditMode(true);
+            }}
+          />
+        ) : (
+          <RoundedButton
+            title="CANCEL"
+            onPress={() => {
+              setIsInEditMode(false);
+            }}
+          />
+        )}
       </ThemedView>
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 
@@ -52,23 +68,12 @@ const styles = StyleSheet.create({
   menuContainer: {
     borderRadius: 8,
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 8,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  editButtonContainer: {
     position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
   },
 });

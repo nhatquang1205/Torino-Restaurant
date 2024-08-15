@@ -13,7 +13,7 @@ export type ThemedTextProps = TextProps & {
 export function MenuItem(props: ThemedTextProps) {
   const { label, iconName, href } = props;
   return (
-    <Link href={href} asChild>
+    <Link href={href} asChild push>
       <Pressable style={styles.default}>
         <Icon name={iconName}></Icon>
         <ThemedText>{label}</ThemedText>

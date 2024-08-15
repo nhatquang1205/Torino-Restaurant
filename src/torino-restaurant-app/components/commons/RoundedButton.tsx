@@ -4,11 +4,12 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 export interface ButtonProps {
   onPress: any;
   title: string;
+  buttonStyle?: any;
 }
-export default function Button(props: ButtonProps) {
-  const { onPress, title = 'Save' } = props;
+export default function RoundedButton(props: ButtonProps) {
+  const { onPress, title = 'Save', buttonStyle } = props;
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable style={{ ...styles.button, ...buttonStyle }} onPress={onPress}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );

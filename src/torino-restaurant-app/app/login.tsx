@@ -16,7 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { PRIMARY } from '@/constants/Colors';
 import { LoginTextInput } from '@/components/login/TextInputComponent';
 import AppIcon from '@/components/commons/Icon';
-import Button from '@/components/commons/Buttons';
+import Button from '@/components/commons/RoundedButton';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();

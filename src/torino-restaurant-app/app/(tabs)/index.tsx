@@ -39,7 +39,7 @@ export default function HomeScreen() {
     >
       <ThemedView style={styles.menuContainer}>
         <MenuItem
-          label="Thực đơn"
+          label="Categories"
           iconName="restaurant-menu"
           href="/categories"
         />

@@ -11,8 +11,9 @@ import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { store } from '@/store/store';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
+import { Stack } from 'expo-router/stack';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
