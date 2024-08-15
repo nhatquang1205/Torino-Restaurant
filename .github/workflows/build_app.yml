@@ -15,6 +15,7 @@ jobs:
       status: ${{ steps.changed-files-specific.outputs.any_changed }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Get changed files in the docs folder
         id: changed-files-specific
         uses: tj-actions/changed-files@v44
@@ -32,8 +33,9 @@ jobs:
         with:
           node-version: 20.11.1
       - name: build and test lint
-        working-directory: ./src/torino-restaurant-app
+        working-directory: src/torino-restaurant-app
         run: |
+          ls
           npm install yarn
           yarn install
           yarn lint
