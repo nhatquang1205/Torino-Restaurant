@@ -5,12 +5,17 @@ export interface ButtonProps {
   onPress: any;
   title: string;
   buttonStyle?: any;
+  isLoading?: boolean;
 }
 export default function RoundedButton(props: ButtonProps) {
-  const { onPress, title = 'Save', buttonStyle } = props;
+  const { onPress, title = 'Save', buttonStyle, isLoading } = props;
   return (
     <Pressable style={{ ...styles.button, ...buttonStyle }} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+      {isLoading ? (
+        <Text style={styles.text}>Loading...</Text>
+      ) : (
+        <Text style={styles.text}>{title}</Text>
+      )}
     </Pressable>
   );
 }
@@ -24,7 +29,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 32,
     elevation: 3,
-    backgroundColor: 'rgba(138, 138, 138, 0.13)',
   },
   text: {
     fontSize: 30,
@@ -34,5 +38,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'black',
     opacity: 1,
+    paddingTop: 10,
   },
 });

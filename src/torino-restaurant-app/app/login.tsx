@@ -21,7 +21,7 @@ import Button from '@/components/commons/RoundedButton';
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: any) => state.app);
-  const { post, response, error } = usePostApi<ILoginResponse>(
+  const { post, response, error, isLoading } = usePostApi<ILoginResponse>(
     API_URLS.AUTH.LOGIN,
     {}
   );
@@ -32,26 +32,14 @@ export default function LoginScreen() {
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    async function setToken(response: ILoginResponse) {
-      await SecureStore.setItemAsync('token', response.token);
-      await SecureStore.setItemAsync('refresh_token', response.refreshToken);
-      await SecureStore.setItemAsync(
-        'refresh_token_expiry_time',
-        response.refreshTokenExpiryTime
-      );
-    }
-
-    if (response) {
-      setToken(response).then(() => {
-        dispatch(setIsAuthenticate(true));
-      });
-    }
-
-    if (error) {
-      console.log(error);
-    }
-  }, [dispatch, response, error]);
+  async function setToken(response: ILoginResponse) {
+    await SecureStore.setItemAsync('token', response.token);
+    await SecureStore.setItemAsync('refresh_token', response.refreshToken);
+    await SecureStore.setItemAsync(
+      'refresh_token_expiry_time',
+      response.refreshTokenExpiryTime
+    );
+  }
 
   const [username, setUsername] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
@@ -63,11 +51,25 @@ export default function LoginScreen() {
     setPassword(value);
   };
   const handleOnPress = function () {
+    if (!username || !password) {
+      alert('Please enter username and password');
+      return;
+    }
     const loginInput: ILoginInput = {
       username: username,
       password: password,
     };
-    post(loginInput);
+    post(loginInput).then(() => {
+      if (response) {
+        setToken(response).then(() => {
+          dispatch(setIsAuthenticate(true));
+        });
+      }
+
+      if (error) {
+        alert(error);
+      }
+    });
   };
   return (
     <ParallaxScrollView
@@ -84,14 +86,12 @@ export default function LoginScreen() {
           type="title"
           style={{
             color: PRIMARY,
-            fontFamily: 'LoveYaLikeASister',
-            textAlign: 'center',
-            verticalAlign: 'middle',
+            ...styles.title,
           }}
         >
           Torino
         </ThemedText>
-        <ThemedText type="title" style={{ fontFamily: 'LoveYaLikeASister' }}>
+        <ThemedText type="title" style={styles.title}>
           Restaurant
         </ThemedText>
         <AppIcon
@@ -127,13 +127,17 @@ export default function LoginScreen() {
         </LoginTextInput>
       </ThemedView>
       <ThemedView style={{ marginTop: 16, alignItems: 'center', gap: 16 }}>
-        <Button title="Login" onPress={handleOnPress} />
+        <Button
+          title="Login"
+          onPress={handleOnPress}
+          isLoading={isLoading}
+          buttonStyle={{ backgroundColor: 'rgba(138, 138, 138, 0.13)' }}
+        />
         <ThemedText type="default">
           Forgot Password?{' '}
           <ThemedText type="defaultSemiBold">Click Here!</ThemedText>
         </ThemedText>
       </ThemedView>
-      <ThemedText>{error}</ThemedText>
       <ThemedView style={styles.footer}>
         <AppIcon
           source={require('@/assets/icons/spaghetti.png')}
@@ -156,6 +160,11 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontFamily: 'LoveYaLikeASister',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+  },
   titleContainer: {
     flexDirection: 'column',
     alignItems: 'center',

@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   input: {
-    fontSize: 16,
-    width: 'auto',
+    fontSize: 20,
+    flex: 1,
     fontFamily: 'SpaceMono',
   },
   searchIcon: {

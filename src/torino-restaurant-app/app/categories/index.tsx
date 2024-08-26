@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   editButtonContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 20,
     alignSelf: 'center',
   },
 });
