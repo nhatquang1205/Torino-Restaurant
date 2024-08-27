@@ -48,7 +48,7 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(long id, [FromBody] CategoryCreateUpdateEntity category)
+        public async Task<IActionResult> Put(long id, [FromForm] CategoryCreateUpdateEntity category)
         {
             await _mediator.Send(new UpdateCategoryCommand(id, category.Name, category.Description, category.Image, category.IsDeleteImage));
             return NoContent();
