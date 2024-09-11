@@ -24,7 +24,7 @@ namespace TorinoRestaurant.Application.Categories.Models
         /// <example>Món khai vị</example>
         [StringLength(100, ErrorMessage = "E005")]
         [JsonProperty("description")]
-        public required string Description { get; init; }
+        public string Description { get; init; }
 
         [JsonProperty("image")]
         public IFormFile? Image { get; init; }

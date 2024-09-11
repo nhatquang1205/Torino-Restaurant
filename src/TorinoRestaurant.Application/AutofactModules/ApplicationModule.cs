@@ -20,6 +20,9 @@ namespace TorinoRestaurant.Application.AutofacModules
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<>));
+
             // Register Automapper profiles
             var config = new MapperConfiguration(cfg => { cfg.AddMaps(ThisAssembly); });
             config.AssertConfigurationIsValid();
