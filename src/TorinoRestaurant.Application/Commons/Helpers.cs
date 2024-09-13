@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace TorinoRestaurant.Application.Commons
 {
@@ -185,6 +186,14 @@ namespace TorinoRestaurant.Application.Commons
             str = str.Replace("\\", "[\\]");
             str = str.Replace("'", "''");
             return str;
+        }
+
+        public static IFormFile Base64ToImage(string base64Image, string name)
+        {
+
+            byte[] bytes = Convert.FromBase64String(base64Image);
+            MemoryStream stream = new(bytes);
+            return new FormFile(stream, 0, bytes.Length, name, name);
         }
     }
 }

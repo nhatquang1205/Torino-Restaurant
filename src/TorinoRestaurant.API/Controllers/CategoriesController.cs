@@ -6,6 +6,7 @@ using TorinoRestaurant.Application.Categories.Command;
 using TorinoRestaurant.Application.Categories.Models;
 using TorinoRestaurant.Application.Categories.Queries;
 using TorinoRestaurant.Application.Common.Models;
+using TorinoRestaurant.Application.Commons;
 
 namespace TorinoRestaurant.API.Controllers
 {
@@ -40,6 +41,14 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Post([FromForm] CategoryCreateUpdateEntity category)
         {
+            if (!string.IsNullOrEmpty(category.Base64Image))
+            {
+                var imageFile = Helpers.Base64ToImage(category.Base64Image, category.ImageName);
+                if (imageFile != null)
+                {
+                    category.Image = imageFile;
+                }
+            }
             var id = await _mediator.Send(new CreateCategoryCommand(category.Name, category.Description, category.Image));
             return CreatedAtAction(nameof(Get), new { id }, new CreatedResultEnvelope(id.ToString()));
         }
@@ -50,6 +59,14 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(long id, [FromForm] CategoryCreateUpdateEntity category)
         {
+            if (!string.IsNullOrEmpty(category.Base64Image))
+            {
+                var imageFile = Helpers.Base64ToImage(category.Base64Image, category.ImageName);
+                if (imageFile != null)
+                {
+                    category.Image = imageFile;
+                }
+            }
             await _mediator.Send(new UpdateCategoryCommand(id, category.Name, category.Description, category.Image, category.IsDeleteImage));
             return NoContent();
         }
