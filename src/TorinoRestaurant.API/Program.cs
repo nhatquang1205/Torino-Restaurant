@@ -61,8 +61,9 @@ builder.Services.AddSingleton(sp =>
     var endpoint = configuration.GetValue<string>("MinioSettings:Endpoint");
     var accessKey = configuration.GetValue<string>("MinioSettings:AccessKey");
     var secretKey = configuration.GetValue<string>("MinioSettings:SecretKey");
+    var useSSL = configuration.GetValue<bool>("MinioSettings:UseSSL");
 
-    return new MinioClient().WithEndpoint(endpoint).WithCredentials(accessKey, secretKey).WithSSL(false).Build();
+    return new MinioClient().WithEndpoint(endpoint).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build();
 });
 
 builder.Services.AddScoped<IFileStorageService, MinIOFileStorageService>(sp =>
