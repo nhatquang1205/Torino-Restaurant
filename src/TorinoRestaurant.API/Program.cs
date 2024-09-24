@@ -11,6 +11,7 @@ using TorinoRestaurant.Application.Commons;
 using Minio;
 using TorinoRestaurant.Application.Abstractions.Services;
 using TorinoRestaurant.Infrastructure.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -72,6 +73,16 @@ builder.Services.AddScoped<IFileStorageService, MinIOFileStorageService>(sp =>
     var minioClient = sp.GetRequiredService<IMinioClient>();
 
     return new MinIOFileStorageService(minioClient, bucketName, configuration);
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 104857600; // 100 MB
+});
+
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 104857600; // 100 MB
 });
 
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
