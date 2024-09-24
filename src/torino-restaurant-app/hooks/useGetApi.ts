@@ -19,16 +19,19 @@ export function useGetApi<T>(props: any) {
       const token = await SecureStore.getItemAsync('token');
       const newOptions = {
         ...(options || {}),
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
         'x-requestid': requestId,
-        Authorization: `Bearer ${token}`,
       };
+      const res = await axios.get<T>(`${baseUrl}/${url}`, {
+        headers: newOptions,
+      });
 
-      const res = await axios.get<T>(`${baseUrl}/${url}`, newOptions);
       setData(res.data);
       setError(null);
       setIsLoading(false);
     } catch (err: any) {
+      console.log(err);
       const { data } = err.response;
       setError(data.errorMessage);
     } finally {

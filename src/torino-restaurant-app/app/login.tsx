@@ -21,7 +21,7 @@ import Button from '@/components/commons/RoundedButton';
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: any) => state.app);
-  const { post, response, error, isLoading } = usePostApi<ILoginResponse>(
+  const { post, isLoading } = usePostApi<ILoginResponse>(
     API_URLS.AUTH.LOGIN,
     {}
   );
@@ -50,7 +50,7 @@ export default function LoginScreen() {
   const handleOnChangePassword = function (value: string) {
     setPassword(value);
   };
-  const handleOnPress = function () {
+  const handleOnPress = async function () {
     if (!username || !password) {
       alert('Please enter username and password');
       return;
@@ -59,17 +59,13 @@ export default function LoginScreen() {
       username: username,
       password: password,
     };
-    post(loginInput).then(() => {
-      if (response) {
-        setToken(response).then(() => {
-          dispatch(setIsAuthenticate(true));
-        });
-      }
 
-      if (error) {
-        alert(error);
-      }
-    });
+    const response = await post(loginInput);
+    if (response) {
+      setToken(response).then(() => {
+        dispatch(setIsAuthenticate(true));
+      });
+    }
   };
   return (
     <ParallaxScrollView
@@ -132,6 +128,16 @@ export default function LoginScreen() {
           onPress={handleOnPress}
           isLoading={isLoading}
           buttonStyle={{ backgroundColor: 'rgba(138, 138, 138, 0.13)' }}
+          textStyle={{
+            fontSize: 30,
+            fontFamily: 'LoveYaLikeASister',
+            lineHeight: 30,
+            fontWeight: 'heavy',
+            letterSpacing: 0.25,
+            color: 'black',
+            opacity: 1,
+            paddingTop: 10,
+          }}
         />
         <ThemedText type="default">
           Forgot Password?{' '}

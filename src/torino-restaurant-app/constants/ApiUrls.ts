@@ -4,5 +4,6 @@ export const API_URLS = {
   },
   CATEGORIES: {
     GET_LIST: 'Categories',
+    CREATE: 'Categories',
   },
 };

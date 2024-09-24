@@ -5,31 +5,92 @@ import React from 'react';
 import { ICategoryModel } from '@/models/categories/category_detail';
 import RoundedButton from '@/components/commons/RoundedButton';
 import * as ImagePicker from 'expo-image-picker';
+import { usePostApi } from '@/hooks/usePostApi';
+import { API_URLS } from '@/constants/ApiUrls';
+import { router } from 'expo-router';
+import { PRIMARY } from '@/constants/Colors';
+import { ImagePickerResult } from 'expo-image-picker';
+import Request from '@/repositories';
+import { AxiosRequestHeaders } from 'axios';
 
 export interface CategoryFormProps {
   isEdit: boolean;
   category?: ICategoryModel;
 }
 export default function CategoryForm(props: CategoryFormProps) {
+  const { isEdit, category } = props;
+
+  const { post, isLoading } = usePostApi<any>(
+    isEdit && category
+      ? `${API_URLS.CATEGORIES.CREATE}/${category.id}`
+      : API_URLS.CATEGORIES.CREATE,
+    {
+      'Content-Type': 'multipart/form-data',
+      Method: 'PUT',
+    },
+    isEdit
+  );
+
+  const handleOnSaveButton = async () => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', category?.description || name);
+    if (
+      isChangeImage &&
+      imagePickerResult &&
+      imagePickerResult.assets &&
+      imagePickerResult.assets[0].base64
+    ) {
+      formData.append('base64Image', imagePickerResult?.assets[0].base64);
+      formData.append(
+        'imageName',
+        imagePickerResult?.assets[0].fileName || 'category.png'
+      );
+      formData.append('isDeleteImage', 'true');
+    }
+    if (isEdit && category) {
+      await Request.put(
+        `${API_URLS.CATEGORIES.CREATE}/${category.id}`,
+        formData,
+        {},
+        {
+          'Content-Type': 'multipart/form-data',
+          Method: 'PUT',
+          Accept: '*/*',
+        } as unknown as AxiosRequestHeaders
+      );
+    } else {
+      await Request.post(API_URLS.CATEGORIES.CREATE, formData, {}, {
+        'Content-Type': 'multipart/form-data',
+        Method: 'POST',
+      } as unknown as AxiosRequestHeaders);
+    }
+    router.push('/categories');
+  };
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
+      base64: true,
     });
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
-      console.log(result);
+      setIsChangeImage(true);
+      setImagePickerResult(result);
     } else {
-      alert('You did not select any image.');
     }
   };
 
-  const { isEdit, category } = props;
   const [name, setName] = React.useState<string>(category?.name || '');
   const [selectedImage, setSelectedImage] = React.useState<string>(
-    category?.imageUrl || '@/assets/images/icon.png'
+    category?.imageUrl ||
+      Image.resolveAssetSource(require('@/assets/images/placeholder-img.png'))
+        .uri
   );
+  const [imagePickerResult, setImagePickerResult] =
+    React.useState<ImagePickerResult>();
+  const [isChangeImage, setIsChangeImage] = React.useState<boolean>(false);
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.item}>
@@ -58,7 +119,28 @@ export default function CategoryForm(props: CategoryFormProps) {
         </ThemedView>
       </ThemedView>
       <ThemedView style={styles.editButtonContainer}>
-        <RoundedButton title="SAVE" onPress={() => {}} />
+        <RoundedButton
+          title="SAVE"
+          onPress={handleOnSaveButton}
+          isLoading={isLoading}
+          textStyle={{
+            fontSize: 16,
+            lineHeight: 16,
+            letterSpacing: 0.25,
+            color: 'black',
+            paddingTop: 6,
+          }}
+          buttonStyle={{
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 12,
+            paddingHorizontal: 32,
+            borderRadius: 32,
+            elevation: 1,
+            backgroundColor: PRIMARY,
+          }}
+        />
       </ThemedView>
     </ThemedView>
   );
@@ -81,7 +163,7 @@ const styles = StyleSheet.create({
   },
   editButtonContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 20,
     alignSelf: 'center',
   },
 });

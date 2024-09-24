@@ -6,7 +6,7 @@ import {
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -14,6 +14,7 @@ import { store } from '@/store/store';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { Stack } from 'expo-router/stack';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,15 +37,17 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Provider store={store}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <Slot />
-        </ThemeProvider>
-      </Provider>
-    </SafeAreaView>
+    <RootSiblingParent>
+      <SafeAreaView style={styles.container}>
+        <Provider store={store}>
+          <ThemeProvider
+            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            <Slot />
+          </ThemeProvider>
+        </Provider>
+      </SafeAreaView>
+    </RootSiblingParent>
   );
 }
 

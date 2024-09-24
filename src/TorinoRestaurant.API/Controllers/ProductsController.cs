@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TorinoRestaurant.API.Infrastructure.ActionResults;
 using TorinoRestaurant.Application.Common.Models;
+using TorinoRestaurant.Application.Commons;
 using TorinoRestaurant.Application.Products.Command;
 using TorinoRestaurant.Application.Products.Models;
 using TorinoRestaurant.Application.Products.Queries;
@@ -39,6 +40,14 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Post([FromForm] ProductCreateUpdateEntity product)
         {
+            if (!string.IsNullOrEmpty(product.Base64Image))
+            {
+                var imageFile = Helpers.Base64ToImage(product.Base64Image, product.ImageName);
+                if (imageFile != null)
+                {
+                    product.Image = imageFile;
+                }
+            }
             var id = await _mediator.Send(new CreateProductCommand(product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.Price, product.CostPrice, product.IsUseForPrinter, product.Image));
             return CreatedAtAction(nameof(Post), new { id }, new CreatedResultEnvelope(id.ToString()));
         }
@@ -47,8 +56,16 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(long id, [FromBody] ProductCreateUpdateEntity product)
+        public async Task<IActionResult> Put(long id, [FromForm] ProductCreateUpdateEntity product)
         {
+            if (!string.IsNullOrEmpty(product.Base64Image))
+            {
+                var imageFile = Helpers.Base64ToImage(product.Base64Image, product.ImageName);
+                if (imageFile != null)
+                {
+                    product.Image = imageFile;
+                }
+            }
             await _mediator.Send(new UpdateProductCommand(id, product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.Price, product.CostPrice, product.IsUseForPrinter, product.IsDeleteImage, product.Image));
             return NoContent();
         }

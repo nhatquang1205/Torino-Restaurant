@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextBase } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import { useDispatch } from 'react-redux';
@@ -10,9 +10,13 @@ import { ICategoryModel } from '@/models/categories/category_detail';
 import { CategoryItem } from '@/components/categories/CategoryItem';
 import RoundedButton from '@/components/commons/RoundedButton';
 import { Link } from 'expo-router';
+import { PRIMARY } from '@/constants/Colors';
+import { FlatList } from 'react-native';
 
 export default function ListCategoriesScreen() {
-  const { data, isLoading } = useGetApi<IListResultTemplate<ICategoryModel>>({
+  const { data, isLoading, refresh } = useGetApi<
+    IListResultTemplate<ICategoryModel>
+  >({
     url: API_URLS.CATEGORIES.GET_LIST,
     params: {},
     options: {},
@@ -25,23 +29,59 @@ export default function ListCategoriesScreen() {
     return null;
   }
 
-  return (
-    <ThemedView style={{ flex: 1 }}>
-      <ThemedView style={styles.menuContainer}>
-        {data.items.map((category: ICategoryModel) => {
-          return (
-            <CategoryItem
-              key={`category-${category.id}`}
-              category={category}
-              isInEditMode={isInEditMode}
-            />
-          );
-        })}
-        {isInEditMode && (
+  const renderCategory = (item: ICategoryModel) => {
+    return (
+      <CategoryItem
+        key={`category-${item.id}`}
+        category={item}
+        isInEditMode={isInEditMode}
+        refreshCategories={refresh}
+      />
+    );
+  };
+
+  const renderFooter = () => {
+    return (
+      isInEditMode && (
+        <ThemedView
+          style={{ width: '50%', alignSelf: 'center', paddingBottom: 12 }}
+        >
           <Link asChild href="/categories/create">
-            <RoundedButton title="Add new category" onPress={() => {}} />
+            <RoundedButton
+              title="Add new category"
+              onPress={() => {}}
+              textStyle={{
+                fontSize: 16,
+                lineHeight: 16,
+                letterSpacing: 0.25,
+                color: 'black',
+                paddingTop: 6,
+              }}
+              buttonStyle={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 12,
+                paddingHorizontal: 32,
+                borderRadius: 32,
+                elevation: 1,
+                backgroundColor: PRIMARY,
+              }}
+            />
           </Link>
-        )}
+        </ThemedView>
+      )
+    );
+  };
+
+  return (
+    <ThemedView style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <ThemedView style={styles.menuContainer}>
+        <FlatList
+          data={data.items}
+          renderItem={({ item }) => renderCategory(item)}
+          ListFooterComponent={() => renderFooter()}
+        />
       </ThemedView>
       <ThemedView style={styles.editButtonContainer}>
         {!isInEditMode ? (
@@ -50,12 +90,46 @@ export default function ListCategoriesScreen() {
             onPress={() => {
               setIsInEditMode(true);
             }}
+            textStyle={{
+              fontSize: 16,
+              lineHeight: 16,
+              letterSpacing: 0.25,
+              color: 'black',
+              paddingTop: 6,
+            }}
+            buttonStyle={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 12,
+              paddingHorizontal: 32,
+              borderRadius: 32,
+              elevation: 1,
+              backgroundColor: PRIMARY,
+            }}
           />
         ) : (
           <RoundedButton
             title="CANCEL"
             onPress={() => {
               setIsInEditMode(false);
+            }}
+            textStyle={{
+              fontSize: 16,
+              lineHeight: 16,
+              letterSpacing: 0.25,
+              color: 'black',
+              paddingTop: 6,
+            }}
+            buttonStyle={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 12,
+              paddingHorizontal: 32,
+              borderRadius: 32,
+              elevation: 1,
+              backgroundColor: PRIMARY,
             }}
           />
         )}
@@ -70,10 +144,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     padding: 8,
+    flex: 0.95,
   },
   editButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
     alignSelf: 'center',
+    paddingTop: 10,
   },
 });
