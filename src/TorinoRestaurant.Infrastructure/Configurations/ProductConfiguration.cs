@@ -26,6 +26,11 @@ namespace TorinoRestaurant.Infrastructure.Configurations
                 .WithMany(e => e.Products)
                 .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(e => e.ProductPrices)
+                .WithOne(e => e.Product)
+                .HasForeignKey(e => e.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 

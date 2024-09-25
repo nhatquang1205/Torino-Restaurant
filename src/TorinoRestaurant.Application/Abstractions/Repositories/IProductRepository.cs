@@ -6,5 +6,6 @@ namespace TorinoRestaurant.Application.Abstractions.Repositories
     {
         Task<bool> IsExistSlug(long? productId, string slug);
         Task<Product?> GetProductById(long productId);
+        Task<bool> DeleteProductPrices(List<long> ProductPriceIds);
     }
 }

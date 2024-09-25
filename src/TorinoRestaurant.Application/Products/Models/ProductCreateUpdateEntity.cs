@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -10,6 +6,11 @@ namespace TorinoRestaurant.Application.Products.Models
 {
     public class ProductCreateUpdateEntity
     {
+        public ProductCreateUpdateEntity()
+        {
+            ProductPrices = [];
+            DeletedProductPrices = [];
+        }
         /// <summary>
         /// Tên sản phẩm
         /// </summary>
@@ -46,6 +47,12 @@ namespace TorinoRestaurant.Application.Products.Models
         [JsonProperty("price")]
         public required double Price { get; init; }
 
+        [JsonProperty("productPrices")]
+        public required List<ProductPriceEntity> ProductPrices { get; init; }
+
+        [JsonProperty("deletedProductPrices")]
+        public List<long> DeletedProductPrices { get; init; }
+
         [JsonProperty("costPrice")]
         public required double CostPrice { get; init; }
 
@@ -63,5 +70,17 @@ namespace TorinoRestaurant.Application.Products.Models
 
         [JsonProperty("isDeleteImage")]
         public bool IsDeleteImage { get; init; }
+    }
+
+    public class ProductPriceEntity
+    {
+        [JsonProperty("id")]
+        public long? Id { get; init; }
+
+        [JsonProperty("name")]
+        public required string Name { get; init; }
+
+        [JsonProperty("price")]
+        public required double Price { get; init; }
     }
 }

@@ -3,10 +3,11 @@ using TorinoRestaurant.Application.Abstractions.Commands;
 using TorinoRestaurant.Application.Abstractions.Repositories;
 using TorinoRestaurant.Application.Abstractions.Services;
 using TorinoRestaurant.Core.Abstractions.Guards;
-using TblProduct = TorinoRestaurant.Core.Products.Entities.Product;
 using TblCategory = TorinoRestaurant.Core.Products.Entities.Category;
 using TorinoRestaurant.Application.Commons;
 using TorinoRestaurant.Core.Abstractions.Exceptions;
+using TorinoRestaurant.Application.Products.Models;
+using TorinoRestaurant.Core.Products.Entities;
 
 namespace TorinoRestaurant.Application.Products.Command
 {
@@ -16,11 +17,12 @@ namespace TorinoRestaurant.Application.Products.Command
         string Description,
         string VietnameseDescription,
         long CategoryId,
-        double Price,
+        List<ProductPriceEntity> ProductPrices,
         double CostPrice,
         bool IsUseForPrinter,
         bool IsDeleteImage,
-        IFormFile? Image) : CreateCommand<long> { }
+        IFormFile? Image,
+        List<long> DeletedProductPrices) : CreateCommand<long> { }
 
     public sealed class UpdateProductCommandHandler(IProductRepository productRepository, IRepository<TblCategory, long> categoryRepository, IUnitOfWork unitOfWork, IFileStorageService fileStorageService) : CommandHandler<UpdateProductCommand, long>(unitOfWork, fileStorageService)
     {
@@ -69,7 +71,32 @@ namespace TorinoRestaurant.Application.Products.Command
             existProduct.Description = request.Description;
             existProduct.VietnameseDescription = request.VietnameseDescription;
             existProduct.CostPrice = request.CostPrice;
-            existProduct.Price = request.Price;
+
+            if (request.DeletedProductPrices.Count > 0)
+            {
+                await _productRepository.DeleteProductPrices(request.DeletedProductPrices);
+            }
+
+            var editProductPrices = request.ProductPrices.Where(x => x.Id.HasValue);
+            foreach (var productPrice in editProductPrices)
+            {
+                var existProductPrice = existProduct.ProductPrices.FirstOrDefault(x => x.Id == productPrice.Id);
+                if (existProductPrice != null)
+                {
+                    existProductPrice.Name = productPrice.Name;
+                    existProductPrice.Price = productPrice.Price;
+                }
+            }
+
+            var newProductPrices = request.ProductPrices.Where(x => !x.Id.HasValue);
+            foreach (var productPrice in newProductPrices)
+            {
+                existProduct.ProductPrices.Add(new ProductPrice
+                {
+                    Name = productPrice.Name,
+                    Price = productPrice.Price
+                });
+            }
 
             await UnitOfWork.CommitAsync();
             return request.Id;

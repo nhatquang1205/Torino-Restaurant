@@ -30,7 +30,7 @@ namespace TorinoRestaurant.Infrastructure
         public DbSet<RoleOfUser> RoleOfUsers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<ProductPrice> ProductPrices { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

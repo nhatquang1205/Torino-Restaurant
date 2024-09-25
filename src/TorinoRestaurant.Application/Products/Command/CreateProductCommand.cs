@@ -7,6 +7,8 @@ using TblCategory = TorinoRestaurant.Core.Products.Entities.Category;
 using TorinoRestaurant.Core.Abstractions.Guards;
 using TorinoRestaurant.Application.Commons;
 using TorinoRestaurant.Core.Abstractions.Exceptions;
+using TorinoRestaurant.Application.Products.Models;
+using TorinoRestaurant.Core.Products.Entities;
 
 
 namespace TorinoRestaurant.Application.Products.Command
@@ -16,7 +18,7 @@ namespace TorinoRestaurant.Application.Products.Command
         string Description,
         string VietnameseDescription,
         long CategoryId,
-        double Price,
+        List<ProductPriceEntity> ProductPrices,
         double CostPrice,
         bool IsUseForPrinter,
         IFormFile? Image) : CreateCommand<long> { }
@@ -32,7 +34,18 @@ namespace TorinoRestaurant.Application.Products.Command
 
         protected override async Task<long> HandleAsync(CreateProductCommand request)
         {
-            var product = TblProduct.Create(request.Name, request.Description, request.VietnameseDescription, request.Price, request.CostPrice, request.IsUseForPrinter);
+            var product = TblProduct.Create(
+                request.Name,
+                request.Description,
+                request.VietnameseDescription,
+                request.ProductPrices.Select(x => new ProductPrice
+                {
+                    Name = x.Name,
+                    Price = x.Price
+                }).ToList(),
+                request.CostPrice,
+                request.IsUseForPrinter
+            );
             var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
             Guard.Against.NotFound(category);
             product.SetCategoryId(request.CategoryId);

@@ -10,18 +10,18 @@ namespace TorinoRestaurant.Core.Products.Entities
             string name,
             string description,
             string vietnameseDescription,
-            double price,
+            List<ProductPrice> productPrices,
             double costPrice,
             bool isUseForPrinter)
         {
             Name = name;
             Description = description;
             VietnameseDescription = vietnameseDescription;
-            Price = price;
             CostPrice = costPrice;
             IsUseForPrinter = isUseForPrinter;
             SaleCount = 0;
             OrderDetails = [];
+            ProductPrices = productPrices;
         }
 
         private Product()
@@ -32,13 +32,13 @@ namespace TorinoRestaurant.Core.Products.Entities
             string name,
             string description,
             string vietnameseDescription,
-            double price,
+            List<ProductPrice> productPrices,
             double costPrice,
             bool isUseForPrinter)
         {
             // validation should go here before the aggregate is created
             // an aggregate should never be in an invalid state
-            var product = new Product(name, description, vietnameseDescription, price, costPrice, isUseForPrinter);
+            var product = new Product(name, description, vietnameseDescription, productPrices, costPrice, isUseForPrinter);
             product.PublishCreated();
             return product;
         }
@@ -76,5 +76,6 @@ namespace TorinoRestaurant.Core.Products.Entities
         public bool IsUseForPrinter { get; set; } = true;
         public Category Category { get; set; } = default!;
         public ICollection<OrderDetail> OrderDetails{ get; set; }
+        public ICollection<ProductPrice> ProductPrices { get; set; }
     }
 }

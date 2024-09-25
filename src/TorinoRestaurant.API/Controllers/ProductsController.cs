@@ -50,7 +50,7 @@ namespace TorinoRestaurant.API.Controllers
                     product.Image = imageFile;
                 }
             }
-            var id = await _mediator.Send(new CreateProductCommand(product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.Price, product.CostPrice, product.IsUseForPrinter, product.Image));
+            var id = await _mediator.Send(new CreateProductCommand(product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.ProductPrices, product.CostPrice, product.IsUseForPrinter, product.Image));
             return CreatedAtAction(nameof(Post), new { id }, new CreatedResultEnvelope(id.ToString()));
         }
 
@@ -70,7 +70,7 @@ namespace TorinoRestaurant.API.Controllers
                     product.Image = imageFile;
                 }
             }
-            await _mediator.Send(new UpdateProductCommand(id, product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.Price, product.CostPrice, product.IsUseForPrinter, product.IsDeleteImage, product.Image));
+            await _mediator.Send(new UpdateProductCommand(id, product.Name, product.Description, product.VietnameseDescription, product.CategoryId, product.ProductPrices, product.CostPrice, product.IsUseForPrinter, product.IsDeleteImage, product.Image, product.DeletedProductPrices));
             return NoContent();
         }
 

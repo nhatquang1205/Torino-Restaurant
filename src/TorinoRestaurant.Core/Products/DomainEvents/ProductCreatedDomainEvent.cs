@@ -14,4 +14,11 @@ namespace TorinoRestaurant.Core.Products.DomainEvents
         bool IsUseForPrinter,
         string Slug
         ) : DomainEvent {}
+    
+    public sealed record ProductPriceCreatedDomainEvent(
+        long Id,
+        string Name,
+        long ProductId,
+        double Price
+        ) : DomainEvent {}
 }
