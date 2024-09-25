@@ -39,6 +39,8 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(typeof(CreatedResultEnvelope), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 104857600)]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Post([FromForm] CategoryCreateUpdateEntity category)
         {
             if (!string.IsNullOrEmpty(category.Base64Image))
@@ -57,6 +59,8 @@ namespace TorinoRestaurant.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 104857600)]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Put(long id, [FromForm] CategoryCreateUpdateEntity category)
         {
             if (!string.IsNullOrEmpty(category.Base64Image))

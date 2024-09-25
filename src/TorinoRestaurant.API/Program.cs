@@ -75,16 +75,6 @@ builder.Services.AddScoped<IFileStorageService, MinIOFileStorageService>(sp =>
     return new MinIOFileStorageService(minioClient, bucketName, configuration);
 });
 
-builder.Services.Configure<KestrelServerOptions>(options =>
-{
-    options.Limits.MaxRequestBodySize = 104857600; // 100 MB
-});
-
-builder.Services.Configure<IISServerOptions>(options =>
-{
-    options.MaxRequestBodySize = 104857600; // 100 MB
-});
-
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
     container.RegisterModule(new ApplicationModule());
