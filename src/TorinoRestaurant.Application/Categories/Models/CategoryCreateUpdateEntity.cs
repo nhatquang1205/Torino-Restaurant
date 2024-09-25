@@ -30,10 +30,10 @@ namespace TorinoRestaurant.Application.Categories.Models
         public IFormFile? Image { get; set; }
 
         [JsonProperty("base64Image")]
-        public string Base64Image { get; init; }
+        public string Base64Image { get; init; } = default!;
 
         [JsonProperty("imageName")]
-        public string ImageName { get; init; }
+        public string ImageName { get; init; } = default!;
 
         [JsonProperty("isDeleteImage")]
         public bool IsDeleteImage { get; init; }

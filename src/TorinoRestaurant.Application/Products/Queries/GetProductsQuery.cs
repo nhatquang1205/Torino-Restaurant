@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using TorinoRestaurant.Application.Abstractions.Repositories;
 using TorinoRestaurant.Application.Common.Models;
 using TorinoRestaurant.Application.Common.Extensions;
-using TblCategory = TorinoRestaurant.Core.Products.Entities.Category;
 using TorinoRestaurant.Application.Products.Models;
 
 namespace TorinoRestaurant.Application.Products.Queries
 {
-    public sealed record GetProductsQuery() : ParamsSearch, IRequest<PaginatedList<ProductEntity>>;
+    public sealed record GetProductsQuery() : SearchCondition, IRequest<PaginatedList<ProductEntity>>;
     public sealed class GetProductsQueryHandler(
         IProductRepository repository) : IRequestHandler<GetProductsQuery, PaginatedList<ProductEntity>>
     {
@@ -22,7 +21,8 @@ namespace TorinoRestaurant.Application.Products.Queries
                 .Where(x => string.IsNullOrEmpty(request.KeySearch) ||
                     x.Name.Contains(request.KeySearch) ||
                     x.Description.Contains(request.KeySearch) ||
-                    x.VietnameseDescription.Contains(request.KeySearch));
+                    x.VietnameseDescription.Contains(request.KeySearch))
+                .Where(x => !request.CategoryId.HasValue || x.CategoryId == request.CategoryId);
 
             var products = await query
                 .OrderBy(request)

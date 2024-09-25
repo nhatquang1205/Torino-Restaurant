@@ -14,8 +14,10 @@ public record ParamsSearch
     public string? Keyword { get; set; }
 
     [SwaggerExclude]
-    public string? KeySearch { 
-        get {
+    public string? KeySearch
+    { 
+        get
+        {
             return Keyword?.Trim().ToLower();
         }
      }
