@@ -45,9 +45,6 @@ namespace TorinoRestaurant.Application.Products.Models
         [JsonProperty("vietnameseDescription")]
         public required string VietnameseDescription { get; init; }
 
-        [JsonProperty("price")]
-        public required double Price { get; init; }
-
         [JsonProperty("productPrices")]
         public required List<ProductPriceEntity> ProductPrices { get; init; }
 

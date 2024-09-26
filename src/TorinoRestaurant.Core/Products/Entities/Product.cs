@@ -69,7 +69,7 @@ namespace TorinoRestaurant.Core.Products.Entities
         public string VietnameseDescription { get; set; }
         public double Price { get; set; }
         public double CostPrice { get; set; }
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
         public int SaleCount { get; set; }
         public long CategoryId { get; set; }
         public string Slug { get; set; }
