@@ -17,7 +17,10 @@ namespace TorinoRestaurant.Infrastructure.Repositories
 
         public async Task<Product?> GetProductById(long productId)
         {
-            return await _context.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == productId);
+            return await _context.Products
+                .Include(x => x.Category)
+                .Include(x => x.ProductPrices)
+                .FirstOrDefaultAsync(x => x.Id == productId);
         }
 
         public async Task<bool> DeleteProductPrices(List<long> productPriceIds)
