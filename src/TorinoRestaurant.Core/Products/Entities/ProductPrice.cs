@@ -1,5 +1,4 @@
 using TorinoRestaurant.Core.Abstractions.Entities;
-using TorinoRestaurant.Core.Products.DomainEvents;
 
 namespace TorinoRestaurant.Core.Products.Entities
 {

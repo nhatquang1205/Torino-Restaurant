@@ -12,7 +12,14 @@ namespace TorinoRestaurant.Application.Products.Models
         public double Price { get; set; }
         public bool IsUseForPrinter { get; set; }
         public string ImageUrl { get; set; }
-        public string Slug { get; set;}
-        public int SaleCount { get; set;}
+        public string Slug { get; set; }
+        public int SaleCount { get; set; }
+        public List<ProductPriceEntity> ProductPrices { get; set; }
+
+        public ProductEntity()
+        {
+            ImageUrl = string.Empty;
+            ProductPrices = [];
+        }
     }
 }

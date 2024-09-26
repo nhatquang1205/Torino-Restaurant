@@ -37,7 +37,7 @@ namespace TorinoRestaurant.Application.Products.Queries
                     ImageUrl = x.ImageUrl,
                     Category = x.Category.Name,
                     CategoryId = x.CategoryId,
-                    Price = x.Price,
+                    Price = x.ProductPrices != null && x.ProductPrices.Count != 0 ? x.ProductPrices.Max(x => x.Price) : x.Price,
                     CostPrice = x.CostPrice,
                     IsUseForPrinter = x.IsUseForPrinter,
                     Slug = x.Slug,

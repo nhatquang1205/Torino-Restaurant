@@ -31,6 +31,12 @@ namespace TorinoRestaurant.Application.Products.Queries
                 CategoryId = product.CategoryId,
                 Slug = product.Slug,
                 SaleCount = product.SaleCount,
+                ProductPrices = product.ProductPrices.Select(x => new ProductPriceEntity
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Price = x.Price
+                }).ToList()
             };
         }
     }

@@ -21,7 +21,7 @@ namespace TorinoRestaurant.Core.Products.Entities
             IsUseForPrinter = isUseForPrinter;
             SaleCount = 0;
             OrderDetails = [];
-            ProductPrices = productPrices;
+            ProductPrices = productPrices != null && productPrices.Any() ? productPrices : [];
         }
 
         private Product()
