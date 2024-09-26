@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -60,10 +61,10 @@ namespace TorinoRestaurant.Application.Products.Models
         public IFormFile? Image { get; set; }
 
         [JsonProperty("base64Image")]
-        public string Base64Image { get; init; }
+        public string Base64Image { get; set; } = string.Empty;
 
         [JsonProperty("imageName")]
-        public string ImageName { get; init; }
+        public string ImageName { get; set; } = string.Empty;
 
         [JsonProperty("isUseForPrinter")]
         public bool IsUseForPrinter { get; init; }
