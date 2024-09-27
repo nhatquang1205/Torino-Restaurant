@@ -1,3 +1,4 @@
+import Request from '@/repositories';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useCallback, useEffect, useState } from 'react';
@@ -16,22 +17,12 @@ export function useGetApi<T>(props: any) {
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const token = await SecureStore.getItemAsync('token');
-      const newOptions = {
-        ...(options || {}),
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'x-requestid': requestId,
-      };
-      const res = await axios.get<T>(`${baseUrl}/${url}`, {
-        headers: newOptions,
-      });
+      const res = await Request.get<T>(`${baseUrl}/${url}`, params);
 
-      setData(res.data);
+      setData(res);
       setError(null);
       setIsLoading(false);
     } catch (err: any) {
-      console.log(err);
       const { data } = err.response;
       setError(data.errorMessage);
     } finally {

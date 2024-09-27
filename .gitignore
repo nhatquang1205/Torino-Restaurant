@@ -363,3 +363,6 @@ FodyWeavers.xsd
 .angular/
 /.env
 *.env
+
+/android
+/ios

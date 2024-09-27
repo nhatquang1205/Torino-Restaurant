@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosRequestHeaders } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import * as SecureStore from 'expo-secure-store';
 import { customFlatten } from '@/utils/helper';
+import { Alert } from 'react-native';
+import { router } from 'expo-router';
 
 const instance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_BASE_API_URL,
@@ -57,43 +59,16 @@ instance.interceptors.response.use(
   },
   async (error: AxiosError) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const errorConfig = error.config as any;
-      //   const refreshToken = await getCookie('refreshToken');
-
-      //   if (refreshToken) {
-      //     try {
-      //       const result = await authRepository.refreshToken({
-      //         RefreshToken: refreshToken,
-      //       });
-      //       if (result.Data?.Token && result.Data.RefreshToken) {
-      //         // Store new tokens in cookies
-      //         setCookie('token', result.Data.Token, {
-      //           req: errorConfig.ctx?.req,
-      //           res: errorConfig.ctx?.res,
-      //         });
-      //         setCookie('refreshToken', result.Data.RefreshToken, {
-      //           req: errorConfig.ctx?.req,
-      //           res: errorConfig.ctx?.res,
-      //         });
-
-      //         // Retry the original request with the new token
-      //         errorConfig.headers.Authorization = `Bearer ${result.Data.Token}`;
-      //         return axios(errorConfig);
-      //       } else {
-      //         throw new Error(ERRORS.UNAUTHORIZED_ERROR);
-      //       }
-      //     } catch (e) {
-      //       removeCookie('token', {
-      //         req: errorConfig.ctx?.req,
-      //         res: errorConfig.ctx?.res,
-      //       });
-      //       removeCookie('refreshToken', {
-      //         req: errorConfig.ctx?.req,
-      //         res: errorConfig.ctx?.res,
-      //       });
-      //       return Promise.reject(new Error(ERRORS.UNAUTHORIZED_ERROR));
-      //     }
-      //   }
+      Alert.alert('Error', 'Session Time Out. Please Login Again', [
+        {
+          text: 'OK',
+          onPress: function () {
+            router.push('/login');
+          },
+        },
+      ]);
+    } else {
+      Alert.alert('Error', 'An error occurred. Please try again later');
     }
     return Promise.reject(error);
   }

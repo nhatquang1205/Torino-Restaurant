@@ -16,7 +16,7 @@ export function MenuItem(props: ThemedTextProps) {
     <Link href={href} asChild push>
       <Pressable style={styles.default}>
         <Icon name={iconName}></Icon>
-        <ThemedText>{label}</ThemedText>
+        <ThemedText style={{ textAlign: 'center' }}>{label}</ThemedText>
       </Pressable>
     </Link>
   );
@@ -31,5 +31,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     padding: 4,
+    width: 70,
+    justifyContent: 'center',
   },
 });

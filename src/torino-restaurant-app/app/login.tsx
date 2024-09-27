@@ -2,7 +2,7 @@ import { Image, StyleSheet } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import { usePostApi } from '@/hooks/usePostApi';
@@ -16,15 +16,13 @@ import { ThemedText } from '@/components/ThemedText';
 import { PRIMARY } from '@/constants/Colors';
 import { LoginTextInput } from '@/components/login/TextInputComponent';
 import AppIcon from '@/components/commons/Icon';
-import Button from '@/components/commons/RoundedButton';
+import RoundedButton from '@/components/commons/RoundedButton';
+import Request from '@/repositories';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state: any) => state.app);
-  const { post, isLoading } = usePostApi<ILoginResponse>(
-    API_URLS.AUTH.LOGIN,
-    {}
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -52,20 +50,25 @@ export default function LoginScreen() {
   };
   const handleOnPress = async function () {
     if (!username || !password) {
-      alert('Please enter username and password');
+      alert('Vui lòng nhập tên đăng nhập và mật khẩu');
       return;
     }
+    setIsLoading(true);
     const loginInput: ILoginInput = {
       username: username,
       password: password,
     };
 
-    const response = await post(loginInput);
+    const response = await Request.post<ILoginResponse>(
+      API_URLS.AUTH.LOGIN,
+      loginInput
+    );
     if (response) {
       setToken(response).then(() => {
         dispatch(setIsAuthenticate(true));
       });
     }
+    setIsLoading(false);
   };
   return (
     <ParallaxScrollView
@@ -98,7 +101,7 @@ export default function LoginScreen() {
       </ThemedView>
       <ThemedView style={styles.inputContainer}>
         <LoginTextInput
-          placeholder="UserName"
+          placeholder="Tên đăng nhập"
           value={username}
           onChangeText={handleOnChangeUserName}
         >
@@ -109,7 +112,7 @@ export default function LoginScreen() {
           />
         </LoginTextInput>
         <LoginTextInput
-          placeholder="Password"
+          placeholder="Mật khẩu"
           value={password}
           maxLength={32}
           secureTextEntry
@@ -123,8 +126,8 @@ export default function LoginScreen() {
         </LoginTextInput>
       </ThemedView>
       <ThemedView style={{ marginTop: 16, alignItems: 'center', gap: 16 }}>
-        <Button
-          title="Login"
+        <RoundedButton
+          title="Đăng nhập"
           onPress={handleOnPress}
           isLoading={isLoading}
           buttonStyle={{ backgroundColor: 'rgba(138, 138, 138, 0.13)' }}
@@ -140,8 +143,8 @@ export default function LoginScreen() {
           }}
         />
         <ThemedText type="default">
-          Forgot Password?{' '}
-          <ThemedText type="defaultSemiBold">Click Here!</ThemedText>
+          Quên mật khẩu?{' '}
+          <ThemedText type="defaultSemiBold">Nhắn cho Quang!</ThemedText>
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.footer}>

@@ -1,4 +1,12 @@
-import { StyleSheet, Image, TextInput, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  TextInput,
+  Pressable,
+  Alert,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import React from 'react';
@@ -12,6 +20,7 @@ import { PRIMARY } from '@/constants/Colors';
 import { ImagePickerResult } from 'expo-image-picker';
 import Request from '@/repositories';
 import { AxiosRequestHeaders } from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface CategoryFormProps {
   isEdit: boolean;
@@ -35,6 +44,7 @@ export default function CategoryForm(props: CategoryFormProps) {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', category?.description || name);
+    const uuid = uuidv4();
     if (
       isChangeImage &&
       imagePickerResult &&
@@ -44,7 +54,7 @@ export default function CategoryForm(props: CategoryFormProps) {
       formData.append('base64Image', imagePickerResult?.assets[0].base64);
       formData.append(
         'imageName',
-        imagePickerResult?.assets[0].fileName || 'category.png'
+        imagePickerResult?.assets[0].fileName || uuid
       );
       formData.append('isDeleteImage', 'true');
     }
@@ -65,9 +75,32 @@ export default function CategoryForm(props: CategoryFormProps) {
         Method: 'POST',
       } as unknown as AxiosRequestHeaders);
     }
-    router.push('/categories');
+    Alert.alert('Success', 'Category has been saved', [
+      {
+        text: 'OK',
+        onPress: function () {
+          router.push('/categories');
+        },
+      },
+    ]);
   };
   const pickImageAsync = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'Torino.Boss App Camera Permission',
+        message: 'Torino.Boss App needs access to your camera ',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      }
+    );
+    if (
+      Platform.OS === 'android' &&
+      granted !== PermissionsAndroid.RESULTS.GRANTED
+    ) {
+      return;
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
@@ -120,7 +153,7 @@ export default function CategoryForm(props: CategoryFormProps) {
       </ThemedView>
       <ThemedView style={styles.editButtonContainer}>
         <RoundedButton
-          title="SAVE"
+          title="LƯU"
           onPress={handleOnSaveButton}
           isLoading={isLoading}
           textStyle={{

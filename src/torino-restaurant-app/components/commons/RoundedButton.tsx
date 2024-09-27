@@ -13,7 +13,7 @@ export default function RoundedButton(props: ButtonProps) {
   return (
     <Pressable style={{ ...styles.button, ...buttonStyle }} onPress={onPress}>
       {isLoading ? (
-        <Text style={{ ...textStyle }}>Loading...</Text>
+        <Text style={{ ...textStyle }}>Đang tải...</Text>
       ) : (
         <Text style={{ ...textStyle }}>{title}</Text>
       )}

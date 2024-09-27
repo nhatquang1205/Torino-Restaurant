@@ -1,13 +1,31 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform } from 'react-native';
+import { StyleSheet, Image, Platform, Button } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useDispatch } from 'react-redux';
+import { setIsAuthenticate } from '@/store/app/app-slice';
+import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 
 export default function TabTwoScreen() {
+  const dispatch = useDispatch();
+
+  const handleClickLogOutBtn = function () {
+    async function removeToken() {
+      await SecureStore.deleteItemAsync('token');
+      await SecureStore.deleteItemAsync('refresh_token');
+      await SecureStore.deleteItemAsync('refresh_token_expiry_time');
+    }
+    removeToken().then(() => {
+      dispatch(setIsAuthenticate(false));
+      router.replace('/login');
+    });
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -106,6 +124,9 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
+      <ThemedView>
+        <Button title="Đăng xuất" onPress={handleClickLogOutBtn} />
+      </ThemedView>
     </ParallaxScrollView>
   );
 }

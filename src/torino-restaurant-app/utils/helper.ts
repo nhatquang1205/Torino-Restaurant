@@ -22,7 +22,7 @@ export function customFlatten(obj: any, parentKey = ''): FlattenedParams {
 }
 
 export function thoundsandSeperator(x: number | string | undefined | null) {
-  const value = x;
+  let value = x;
   if (value === undefined || value === null) return;
 
   // Helper function to format a single number
@@ -30,14 +30,8 @@ export function thoundsandSeperator(x: number | string | undefined | null) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
-  // Check if the input is a range
-  if (typeof value === 'string' && value.includes('-')) {
-    const [start, end] = value.split('-').map((part) => part.trim());
-    return `${formatNumber(start)} đ - ${formatNumber(end)} đ`;
-  }
-
   // Otherwise, format it as a single number
-  return `${formatNumber(value)} đ`;
+  return `${formatNumber(value)}`;
 }
 
 export function formatDateString(dateString: string) {
