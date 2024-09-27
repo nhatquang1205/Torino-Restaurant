@@ -364,5 +364,4 @@ FodyWeavers.xsd
 /.env
 *.env
 
-/android
-/ios
+src/torino-restaurant-app/android
